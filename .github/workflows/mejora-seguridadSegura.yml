@@ -1,0 +1,32 @@
+name: 1. Demostración Segura (0 vulnerabilidades)
+
+on:
+  workflow_dispatch: # Botón manual
+
+jobs:
+  escaneo-seguridad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Descargar el código
+        uses: actions/checkout@v4
+
+      - name: 2. Preparar Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: 3. Construir imagen (Código Limpio)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./test/Dockerfile # <--- Apunta a tu código original y limpio
+          push: false 
+          load: true 
+          tags: app-segura:latest
+
+      - name: 4. Escáner Trivy (Debe pasar en Verde)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'app-segura:latest'
+          format: 'table'
+          exit-code: '1' # Si encuentra algo grave fallaría, pero como está limpio, pasará con éxito.
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
