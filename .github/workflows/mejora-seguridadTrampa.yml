@@ -1,45 +1,32 @@
-name: Mejora Continua (Seguridad)
- 
-# ¿Cuándo se va a ejecutar?
+name: 2. Demostración Trampa (Bloqueo automático)
 
 on:
+  workflow_dispatch: # Botón manual
 
-  push:
-
-    branches: [ "master", "main" ]
-
-  workflow_dispatch: # ¡Esto agrega un botón en GitHub para ejecutarlo manual frente al profe!
- 
 jobs:
-
-  escaneo-seguridad:
-
+  escaneo-trampa:
     runs-on: ubuntu-latest
-
     steps:
-
-      - name: 1. Descargar el código del repositorio
-
+      - name: 1. Descargar el código
         uses: actions/checkout@v4
- 
-      - name: 2. Preparar el motor de Docker
 
+      - name: 2. Preparar Docker
         uses: docker/setup-buildx-action@v3
- 
-      - name: 3. Construir imagen (Fase de Build)
+
+      - name: 3. Construir imagen (Código Vulnerable)
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile.vulnerable # <--- CAMBIO 1: Apunta al archivo trampa
+          file: ./Dockerfile.vulnerable 
           push: false 
           load: true 
-          tags: prueba-seguridad:latest
+          tags: app-trampa:latest
 
-      - name: 4. Capa DevSecOps - Escáner Trivy
+      - name: 4. Escáner Trivy (Debe marcar X roja)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'prueba-seguridad:latest'
+          image-ref: 'app-trampa:latest'
           format: 'table'
-          exit-code: '1' # <--- CAMBIO 2: El '1' fuerza al sistema a fallar y detenerse
+          exit-code: '1' 
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
