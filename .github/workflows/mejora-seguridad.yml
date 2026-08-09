@@ -1,0 +1,60 @@
+name: Mejora Continua (Seguridad)
+ 
+# ¿Cuándo se va a ejecutar?
+
+on:
+
+  push:
+
+    branches: [ "master", "main" ]
+
+  workflow_dispatch: # ¡Esto agrega un botón en GitHub para ejecutarlo manual frente al profe!
+ 
+jobs:
+
+  escaneo-seguridad:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: 1. Descargar el código del repositorio
+
+        uses: actions/checkout@v4
+ 
+      - name: 2. Preparar el motor de Docker
+
+        uses: docker/setup-buildx-action@v3
+ 
+      - name: 3. Construir imagen (Fase de Build)
+
+        uses: docker/build-push-action@v5
+
+        with:
+
+          context: .
+
+          file: ./test/Dockerfile
+
+          push: false 
+
+          load: true # Mantiene la imagen en la memoria del servidor para escanearla
+
+          tags: prueba-seguridad:latest
+ 
+      - name: 4. Capa DevSecOps - Escáner Trivy
+
+        uses: aquasecurity/trivy-action@master
+
+        with:
+
+          image-ref: 'prueba-seguridad:latest'
+
+          format: 'table'
+
+          exit-code: '0' # Está en 0 para que termine con palomita verde aunque encuentre cosas, así el profe ve la tabla de resultados.
+
+          ignore-unfixed: true
+
+          severity: 'CRITICAL,HIGH'
+ 
