@@ -27,34 +27,19 @@ jobs:
         uses: docker/setup-buildx-action@v3
  
       - name: 3. Construir imagen (Fase de Build)
-
         uses: docker/build-push-action@v5
-
         with:
-
           context: .
-
-          file: ./test/Dockerfile
-
+          file: ./Dockerfile.vulnerable # <--- CAMBIO 1: Apunta al archivo trampa
           push: false 
-
-          load: true # Mantiene la imagen en la memoria del servidor para escanearla
-
+          load: true 
           tags: prueba-seguridad:latest
- 
+
       - name: 4. Capa DevSecOps - Escáner Trivy
-
         uses: aquasecurity/trivy-action@master
-
         with:
-
           image-ref: 'prueba-seguridad:latest'
-
           format: 'table'
-
-          exit-code: '0' # Está en 0 para que termine con palomita verde aunque encuentre cosas, así el profe ve la tabla de resultados.
-
+          exit-code: '1' # <--- CAMBIO 2: El '1' fuerza al sistema a fallar y detenerse
           ignore-unfixed: true
-
           severity: 'CRITICAL,HIGH'
- 
