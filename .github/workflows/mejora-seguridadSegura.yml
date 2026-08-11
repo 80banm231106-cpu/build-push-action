@@ -18,9 +18,9 @@ jobs:
         with:
           context: .
           file: ./test/Dockerfile # <--- Apunta a tu código original y limpio
-          push: false 
+          push: true 
           load: true 
-          tags: app-segura:latest
+          tags: ghcr.io/${{ github.repository }}/app-segura:latest
 
       - name: 4. Escáner Trivy (Debe pasar en Verde)
         uses: aquasecurity/trivy-action@master
@@ -30,3 +30,5 @@ jobs:
           exit-code: '1' # Si encuentra algo grave fallaría, pero como está limpio, pasará con éxito.
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
+
+          
