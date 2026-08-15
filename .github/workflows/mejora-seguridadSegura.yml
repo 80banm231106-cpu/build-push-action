@@ -9,7 +9,7 @@ permissions:
   packages: write
 
 jobs:
-  escaneo-seguridad:clear
+  escaneo-seguridad:
     runs-on: ubuntu-latest
     steps:
       - name: 1. Descargar el código
