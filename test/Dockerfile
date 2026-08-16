@@ -1,3 +1,3 @@
 # syntax=docker/dockerfile:1
-FROM node:12
+FROM alpine
 RUN echo "Hello World"
