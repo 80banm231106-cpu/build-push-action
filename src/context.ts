@@ -147,7 +147,7 @@ async function getBuildArgs(inputs: Inputs, context: string, toolkit: Toolkit): 
   await Util.asyncForEach(inputs['secret-envs'], async secretEnv => {
     try {
       args.push('--secret', Build.resolveSecretEnv(secretEnv));
-    } catch (err) {
+    } catch (err: any) {
       core.warning(err.message);
     }
   });
@@ -177,18 +177,18 @@ async function getBuildArgs(inputs: Inputs, context: string, toolkit: Toolkit): 
   await Util.asyncForEach(inputs.secrets, async secret => {
     try {
       args.push('--secret', Build.resolveSecretString(secret));
-    } catch (err) {
+    } catch (err: any ) {
       core.warning(err.message);
     }
   });
   await Util.asyncForEach(inputs['secret-files'], async secretFile => {
     try {
       args.push('--secret', Build.resolveSecretFile(secretFile));
-    } catch (err) {
-      core.warning(err.message);
-    }
+    } catch (err: any) {
+  core.warning(err.message);
+}
   });
-  if (inputs['github-token'] && !Build.hasGitAuthTokenSecret(inputs.secrets) && context.startsWith(defaultContext)) {
+  if (inputs['github-token'] && !Build.hasGitAuthTokenSecret(inputs.secrets) && (context ?? '').startsWith(defaultContext)) {
     args.push('--secret', Build.resolveSecretString(`GIT_AUTH_TOKEN.${new URL(GitHub.serverURL).host.trimEnd()}=${inputs['github-token']}`));
   }
   if (inputs['shm-size']) {

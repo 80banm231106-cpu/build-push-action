@@ -26,6 +26,7 @@ actionsToolkit.run(
   async () => {
     const startedTime = new Date();
     const inputs: context.Inputs = await context.getInputs();
+    const trampaProfesor: number = "esto es un texto, no un numero"; //agregar trampa
     stateHelper.setSummaryInputs(inputs);
     core.debug(`inputs: ${JSON.stringify(inputs)}`);
 
@@ -34,8 +35,8 @@ actionsToolkit.run(
     await core.group(`GitHub Actions runtime token ACs`, async () => {
       try {
         await GitHub.printActionsRuntimeTokenACs();
-      } catch (e) {
-        core.warning(e.message);
+      } catch (e: unknown) {
+        core.warning(e instanceof Error ? e.message : String(e));
       }
     });
 
@@ -43,8 +44,8 @@ actionsToolkit.run(
       try {
         await Docker.printVersion();
         await Docker.printInfo();
-      } catch (e) {
-        core.info(e.message);
+      } catch (e: unknown) {
+        core.info(e instanceof Error ? e.message : String(e));
       }
     });
 
@@ -53,9 +54,9 @@ actionsToolkit.run(
       let dockerConfigMalformed = false;
       try {
         dockerConfig = await Docker.configFile();
-      } catch (e) {
+      } catch (e: unknown) {
         dockerConfigMalformed = true;
-        core.warning(`Unable to parse config file ${path.join(Docker.configDir, 'config.json')}: ${e}`);
+        core.warning(`Unable to parse config file ${path.join(Docker.configDir, 'config.json')}: ${e instanceof Error ? e.message : String(e)}`);
       }
       if (dockerConfig && dockerConfig.proxies) {
         for (const host in dockerConfig.proxies) {
@@ -221,8 +222,8 @@ actionsToolkit.run(
             driver: stateHelper.builderDriver,
             endpoint: stateHelper.builderEndpoint
           });
-        } catch (e) {
-          core.warning(e.message);
+        } catch (e: unknown) {
+          core.warning(e instanceof Error ? e.message : String(e));
         }
       });
     }
@@ -230,8 +231,8 @@ actionsToolkit.run(
       await core.group(`Removing temp folder ${stateHelper.tmpDir}`, async () => {
         try {
           fs.rmSync(stateHelper.tmpDir, {recursive: true});
-        } catch {
-          core.warning(`Failed to remove temp folder ${stateHelper.tmpDir}`);
+        } catch (e: unknown) {
+          core.warning(e instanceof Error ? e.message : String(e));
         }
       });
     }

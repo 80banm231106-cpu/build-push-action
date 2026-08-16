@@ -54,9 +54,12 @@ describe('getInputs', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    process.env = Object.keys(process.env).reduce((object, key) => {
-      if (!key.startsWith('INPUT_')) {
-        object[key] = process.env[key];
+    process.env = Object.keys(process.env).reduce<Record<string, string>>((object, key) => {
+      if (!String(key).startsWith('INPUT_')) {
+        const value = process.env[key];
+        if (value !== undefined) {
+          object[key as string] = value;
+        }
       }
       return object;
     }, {});
@@ -119,9 +122,12 @@ describe('getInputs', () => {
 describe('getArgs', () => {
   const originalEnv = process.env;
   beforeEach(() => {
-    process.env = Object.keys(process.env).reduce((object, key) => {
-      if (!key.startsWith('INPUT_')) {
-        object[key] = process.env[key];
+    process.env = Object.keys(process.env).reduce<Record<string, string>>((object, key) => {
+      if (!String(key).startsWith('INPUT_')) {
+          const value = process.env[key];
+        if (value !== undefined) {
+          object[key as string] = value;
+        }
       }
       return object;
     }, {});
