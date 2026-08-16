@@ -1,4 +1,4 @@
-name: 1. Demostración Segura (0 vulnerabilidades)
+name: Demostración con Vulnerabilidades
 
 on:
   workflow_dispatch: # Botón manual
@@ -32,13 +32,13 @@ jobs:
           context: .
           file: ./test/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/app-segura:latest
+          tags: ghcr.io/${{ github.repository }}/app-vulnerable:latest
 
-      - name: 4. Escáner Trivy (Debe pasar en Verde)
+      - name: 4. Escáner Trivy (Debe fallar en Rojo)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/${{ github.repository }}/app-segura:latest
+          image-ref: ghcr.io/${{ github.repository }}/app-vulnerable:latest
           format: 'table'
-          exit-code: '0'
+          exit-code: '1' # ¡CAMBIO CLAVE!: Fuerza el fallo del flujo (exit-code 1) si detecta problemas
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
