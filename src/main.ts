@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as core from '@actions/core';
 import * as actionsToolkit from '@docker/actions-toolkit';
+import { moduloFalso } from './archivo-falso-del-profesor.js'; //prueba falsa
 
 import {Buildx} from '@docker/actions-toolkit/lib/buildx/buildx.js';
 import {History as BuildxHistory} from '@docker/actions-toolkit/lib/buildx/history.js';
@@ -26,7 +27,7 @@ actionsToolkit.run(
   async () => {
     const startedTime = new Date();
     const inputs: context.Inputs = await context.getInputs();
-    const trampaProfesor: number = "esto es un texto, no un numero"; //agregar trampa
+    
     stateHelper.setSummaryInputs(inputs);
     core.debug(`inputs: ${JSON.stringify(inputs)}`);
 
