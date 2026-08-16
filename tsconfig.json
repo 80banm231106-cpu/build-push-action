@@ -5,13 +5,14 @@
     "esModuleInterop": true,
     "newLine": "lf",
     "outDir": "./lib",
-    "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "resolveJsonModule": true,
     "useUnknownInCatchVariables": false,
+    "types": ["node", "vitest"]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "__tests__/**/*.ts"
   ]
 }
