@@ -9,13 +9,11 @@ COPY package.json yarn.lock .yarnrc.yml ./
 
 # 4. Habilitar Corepack e instalar dependencias (Yarn moderno)
 RUN corepack enable
-RUN yarn install 
+RUN yarn install
 
-# 5. Copiar el resto del código 
+# 5. Copiar el resto del código fuente y la carpeta dist ya compilada
 COPY . .
+COPY dist/ ./dist/
 
-# 6. Ejecutar el script de construcción
-RUN yarn build
-
-# 7. Comando para arrancar 
+# 6. Comando para arrancar el archivo empaquetado
 CMD ["node", "dist/index.cjs"]
