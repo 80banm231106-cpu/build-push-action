@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as core from '@actions/core';
 import * as actionsToolkit from '@docker/actions-toolkit';
 
-//const Todo = ++++; //prueba push
+const Todo = 6; //prueba push
 
 import {Buildx} from '@docker/actions-toolkit/lib/buildx/buildx.js';
 import {History as BuildxHistory} from '@docker/actions-toolkit/lib/buildx/history.js';
